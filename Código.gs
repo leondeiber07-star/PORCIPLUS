@@ -1,4 +1,4 @@
-﻿/**
+/**
  * =========================================================================
  * PORCIPLUS - SISTEMA DE CONTROL DE MORTALIDAD DE CERDAS & RBAC
  * Código Apps Script (Code.gs)
@@ -39,39 +39,36 @@ function extraerIdHoja(str) {
   return s.split(/[/?#]/)[0];
 }
 
+const SPREADSHEET_ID_PORCIPLUS = '1AOHeFWD0iAkpGGmpH9bmw2Tp5aMYcunWkvSg8IMRiek';
+
 /**
- * Obtiene la Hoja de Cálculo objetivo: por ID personalizado o activa
+ * Obtiene la Hoja de Cálculo objetivo: por ID personalizado o predeterminada
  */
 function obtenerSpreadsheet(customId) {
-  if (customId && typeof customId === 'string' && customId.trim() !== '') {
-    const cleanId = extraerIdHoja(customId);
+  const targetId = (customId && typeof customId === 'string' && customId.trim() !== '')
+    ? extraerIdHoja(customId)
+    : (PropertiesService.getScriptProperties().getProperty('SPREADSHEET_ID') || SPREADSHEET_ID_PORCIPLUS);
+
+  if (targetId) {
     try {
-      const ssFound = SpreadsheetApp.openById(cleanId);
+      const ssFound = SpreadsheetApp.openById(targetId);
       if (ssFound) {
-        PropertiesService.getScriptProperties().setProperty('SPREADSHEET_ID', cleanId);
+        PropertiesService.getScriptProperties().setProperty('SPREADSHEET_ID', targetId);
         return ssFound;
       }
     } catch (e) {
-      console.warn('No se pudo abrir hoja con ID ' + cleanId + ': ' + e.toString());
+      console.warn('No se pudo abrir hoja con ID ' + targetId + ': ' + e.toString());
     }
   }
+
   try {
     const active = SpreadsheetApp.getActiveSpreadsheet();
     if (active) return active;
   } catch (e) {}
 
-  const props = PropertiesService.getScriptProperties();
-  const savedId = props.getProperty('SPREADSHEET_ID');
-  if (savedId) {
-    try {
-      const ssSaved = SpreadsheetApp.openById(savedId);
-      if (ssSaved) return ssSaved;
-    } catch (e) {}
-  }
-
   try {
     const newSs = SpreadsheetApp.create('PORCIPLUS - Base de Datos');
-    props.setProperty('SPREADSHEET_ID', newSs.getId());
+    PropertiesService.getScriptProperties().setProperty('SPREADSHEET_ID', newSs.getId());
     return newSs;
   } catch (e) {
     console.error('Error al crear hoja automatica: ' + e.toString());

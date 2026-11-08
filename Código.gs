@@ -46,14 +46,35 @@ function obtenerSpreadsheet(customId) {
   if (customId && typeof customId === 'string' && customId.trim() !== '') {
     const cleanId = extraerIdHoja(customId);
     try {
-      return SpreadsheetApp.openById(cleanId);
+      const ssFound = SpreadsheetApp.openById(cleanId);
+      if (ssFound) {
+        PropertiesService.getScriptProperties().setProperty('SPREADSHEET_ID', cleanId);
+        return ssFound;
+      }
     } catch (e) {
       console.warn('No se pudo abrir hoja con ID ' + cleanId + ': ' + e.toString());
     }
   }
   try {
-    return SpreadsheetApp.getActiveSpreadsheet();
+    const active = SpreadsheetApp.getActiveSpreadsheet();
+    if (active) return active;
+  } catch (e) {}
+
+  const props = PropertiesService.getScriptProperties();
+  const savedId = props.getProperty('SPREADSHEET_ID');
+  if (savedId) {
+    try {
+      const ssSaved = SpreadsheetApp.openById(savedId);
+      if (ssSaved) return ssSaved;
+    } catch (e) {}
+  }
+
+  try {
+    const newSs = SpreadsheetApp.create('PORCIPLUS - Base de Datos');
+    props.setProperty('SPREADSHEET_ID', newSs.getId());
+    return newSs;
   } catch (e) {
+    console.error('Error al crear hoja automática: ' + e.toString());
     return null;
   }
 }
@@ -256,7 +277,12 @@ function apiVincularHoja(customIdOrUrl) {
  */
 function doPost(e) {
   try {
-    const data = JSON.parse(e.postData.contents);
+    let data = {};
+    if (e && e.postData && e.postData.contents) {
+      try { data = JSON.parse(e.postData.contents); } catch (errP) { data = e.parameter || {}; }
+    } else if (e && e.parameter) {
+      data = e.parameter;
+    }
     const ss = obtenerSpreadsheet(data.sheetId);
     if (!ss) throw new Error('No se encontró la hoja de cálculo de destino.');
 

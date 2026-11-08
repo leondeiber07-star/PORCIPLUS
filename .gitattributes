@@ -1,0 +1,6 @@
+# Establecer codificación y manejo de saltos de línea para git
+* text=auto eol=lf
+*.gs text eol=lf
+*.html text eol=lf
+*.md text eol=lf
+*.json text eol=lf

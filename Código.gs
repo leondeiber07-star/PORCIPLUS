@@ -151,7 +151,13 @@ function doGet(e) {
       });
     }
 
-    return HtmlService.createTemplateFromFile('Index')
+    let template;
+    try {
+      template = HtmlService.createTemplateFromFile('index');
+    } catch (e1) {
+      template = HtmlService.createTemplateFromFile('Index');
+    }
+    return template
       .evaluate()
       .setTitle('PORCIPLUS - Sistema de Mortalidad & Usuarios')
       .setXFrameOptionsMode(HtmlService.XFrameOptionsMode.ALLOWALL)

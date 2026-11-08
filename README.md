@@ -42,7 +42,7 @@ El sistema cuenta con arquitectura cliente-servidor basada en **Google Apps Scri
 PORCIPLUS/
 │
 ├── Código.gs          # Backend en Google Apps Script (APIs, sincronización, base de datos)
-├── index.html         # Frontend cliente (SPA interactiva moderna, interfaz y lógica React)
+├── Index.html         # Frontend cliente (SPA interactiva moderna, interfaz y lógica React)
 ├── .gitignore         # Reglas de exclusión para control de versiones Git
 ├── .gitattributes     # Normalización de saltos de línea (LF) y codificación UTF-8
 └── README.md          # Documentación general del sistema
@@ -63,8 +63,8 @@ PORCIPLUS/
 
 ### 3. Crear el Archivo de Interfaz
 1. En el panel izquierdo de Apps Script, haz clic en el botón **+** (Añadir un archivo) y selecciona **HTML**.
-2. Nómbralo **`index`** (o `Index`, ambos son compatibles).
-3. Reemplaza todo su contenido con el archivo [`index.html`](index.html) de este repositorio.
+2. Nómbralo exactamente **`Index`** (Apps Script añade automáticamente la extensión `.html`).
+3. Reemplaza todo su contenido con el archivo [`Index.html`](Index.html) de este repositorio.
 4. Guarda los cambios (`Ctrl + S`).
 
 ### 4. Implementar como Aplicación Web (Web App)

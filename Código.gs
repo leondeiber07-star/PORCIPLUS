@@ -1,4 +1,4 @@
-/**
+﻿/**
  * =========================================================================
  * PORCIPLUS - SISTEMA DE CONTROL DE MORTALIDAD DE CERDAS & RBAC
  * Código Apps Script (Code.gs)
@@ -74,7 +74,7 @@ function obtenerSpreadsheet(customId) {
     props.setProperty('SPREADSHEET_ID', newSs.getId());
     return newSs;
   } catch (e) {
-    console.error('Error al crear hoja automática: ' + e.toString());
+    console.error('Error al crear hoja automatica: ' + e.toString());
     return null;
   }
 }
